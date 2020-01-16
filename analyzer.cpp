@@ -1,8 +1,7 @@
 #include "analyzer.h"
+#include <set>
 #include <QDebug>
-QVector<Diagram> analyze_current_diagramm(Diagram current);
-
-QVector<Diagram> analyze_usecase_diagram(Diagram use_case);
+#include <algorithm>
 
 /*
 QMap<QString,complex> analyze_current_file(DiagramType type, QString name, ProjectData Project);
@@ -67,47 +66,45 @@ QMap<QString,complex> analyze_current_file(DiagramType type, QString name,Projec
     }
 }
 */
-QVector<Diagram> Analyzer::analyze(QVector<Diagram> diagrams)
-{
-    QVector<Diagram> newElements;
-    foreach(Diagram element, diagrams)
-    {
-        newElements = analyze_current_diagramm(element);
 
-        diagrams.append(newElements);
-        newElements.clear();
-     }
-    return diagrams;
+bool Analyzer::equalNames(const Diagram& lhs, const Diagram& rhs) {
+    return lhs.m_name == rhs.m_name;
 }
 
-QVector<Diagram> analyze_current_diagramm(Diagram item)
-{
-    switch (item.m_type)
-    {
-        case Diagram::Type::use_case:
-        {
-            return analyze_usecase_diagram(item);
-        }
-        case Diagram::Type::robustness:
-        {
-            //return analyze_robustness_diagram(item);
-        }
-        case Diagram::Type::sequence:
-        {
-            // TODO проверка модели
-            // TODO нужен тест!
-           // analyze_sequence_diagram(name,Project);
-            //анализ диаграммы последовательности не вносит изменения в список элементов
-            //изменения вносятся только в предментную область
-           // QMap<QString,complex> new_structure;
-            //это  чтобы программа не падала
-           // return new_structure;
-        }
-        case Diagram::Type::classes:
-        {
-            //QMap<QString,complex> new_structure;
-           // return new_structure;
-        }
+void Analyzer::insertOrUpdate(const Diagram& diag, QVector<Diagram>& diagrams) {
+    auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
+        return equalNames(diag, elem);
+    });
+
+    if (it == diagrams.end()) {
+        diagrams.push_back(diag);
     }
+    else {
+        *it = diag;
+    }
+}
+
+QVector<Diagram> Analyzer::analyze(QVector<Diagram> copy_diagrams)
+{
+    QVector<Diagram> result(copy_diagrams);
+
+    for (auto& diagram : copy_diagrams)
+    {
+        analyze_current_diagramm(diagram, result);
+    }
+
+    return result;
+}
+
+void Analyzer::analyze_current_diagramm(Diagram& item, QVector<Diagram>& all_diagrams)
+{
+    std::map<Diagram::Type, std::function<void(Diagram&, QVector<Diagram>&)>> functions({
+        { Diagram::Type::use_case, Analyzer::analyze_usecase_diagram },
+        { Diagram::Type::robustness, Analyzer::analyze_robustness_diagram },
+        { Diagram::Type::sequence, Analyzer::analyze_sequence_diagram },
+        { Diagram::Type::classes, Analyzer::analyze_classes_diagram }
+    });
+
+    functions[item.m_type](item, all_diagrams);
 }
 

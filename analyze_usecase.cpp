@@ -1,17 +1,18 @@
 #include "analyzer.h"
 #include <QDebug>
 
-QVector<Diagram> analyze_usecase_diagram(Diagram use_case)
+void Analyzer::analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_diagrams)
 {
-    QVector<Diagram> list_precedents;
     QString find_str;
+
     QRegExp ucase ("(((?:usecase )((\\w+( as \".+\")?)|(\".+\" as \\w+)))|(\\(\\w+\\)))(?=\\n)");
     ucase.setMinimal(true);
     ucase.setCaseSensitivity(Qt::CaseInsensitive);
+
     int index=0;
-    while ((index= ucase.indexIn(use_case.m_text, index))!=-1)
+    while ((index = ucase.indexIn(use_case.m_text, index))!=-1)
     {
-        QString capture_str=ucase.cap();
+        QString capture_str = ucase.cap();
         if (capture_str.startsWith('('))
         {
             find_str = capture_str.mid(1, capture_str.length()-2);
@@ -25,13 +26,13 @@ QVector<Diagram> analyze_usecase_diagram(Diagram use_case)
             }
             else find_str = captured[1];
         }
-        list_precedents.push_back(Diagram(Diagram::Type::robustness, find_str, ""));
+
+        insertOrUpdate(Diagram(Diagram::Type::robustness, find_str, ""), all_diagrams);
+
         find_str.clear();
         index+=ucase.matchedLength();
-
     }
     //Analyze::get_actors_list(list_precedents,Project.path);
-    return list_precedents;
 }
 
 QMap<QString,QStringList> Analyzer::get_actors_list(QVector<Diagram> diagrams)
