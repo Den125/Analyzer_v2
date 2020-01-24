@@ -71,7 +71,7 @@ bool Analyzer::equalNames(const Diagram& lhs, const Diagram& rhs) {
     return lhs.m_name == rhs.m_name;
 }
 
-void Analyzer::insertOrUpdate(const Diagram& diag, QVector<Diagram>& diagrams) {
+void Analyzer::insert/*OrUpdate*/(const Diagram& diag, QVector<Diagram>& diagrams) {
     auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
         return equalNames(diag, elem);
     });
@@ -79,8 +79,17 @@ void Analyzer::insertOrUpdate(const Diagram& diag, QVector<Diagram>& diagrams) {
     if (it == diagrams.end()) {
         diagrams.push_back(diag);
     }
-    else {
+   /* else {
         *it = diag;
+    }*/
+}
+void Analyzer::update(const Diagram& diag, QVector<Diagram>& diagrams)
+{
+    auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
+        return equalNames(diag, elem);
+    });
+    if (it != diagrams.end()) {
+        it->m_text=diag.m_text;
     }
 }
 
