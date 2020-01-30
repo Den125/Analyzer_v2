@@ -15,8 +15,9 @@ public:
     static QMap<QString,QStringList> get_actors_list(QVector<Diagram> &diagrams);
 private:
     static bool equalNames(const Diagram& lhs, const Diagram& rhs);
-    static void insert/*OrUpdate*/(const Diagram& diag, QVector<Diagram>& diagrams);
+    static void insert(const Diagram& diag, QVector<Diagram>& diagrams);
     static void update(const Diagram& diag, QVector<Diagram>& diagrams);
+    static void remove(const Diagram& diag, QVector<Diagram>& diagrams);
     static void analyze_current_diagramm(Diagram &current, QVector<Diagram>& all_diagrams);
 
     static void analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_diagrams);

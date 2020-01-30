@@ -21,6 +21,7 @@ void Analyzer::analyze_robustness_diagram(Diagram& robustness, QVector<Diagram>&
             }
             else if (captured_object.length()>=4)
             {
+               // qDebug()<<captured_object;
                 QStringList cap_obj;
                 cap_obj<<captured_object[0]<<" ";
                 int i=1;
@@ -29,7 +30,7 @@ void Analyzer::analyze_robustness_diagram(Diagram& robustness, QVector<Diagram>&
                     captured_object[i].remove("\"");
                     cap_obj[1]=cap_obj[1]+" "+captured_object[i];
                 }
-                cap_obj<<captured_object[i]<<captured_object[i+1];
+                cap_obj<<captured_object[i]<<captured_object[1];
                 captured_object.clear();
                 captured_object=cap_obj;
             }

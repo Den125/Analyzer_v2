@@ -2,12 +2,25 @@
 #include <set>
 #include <QDebug>
 #include <algorithm>
+#include <iostream>
 
 bool Analyzer::equalNames(const Diagram& lhs, const Diagram& rhs) {
     return lhs.m_name == rhs.m_name;
+   // std::clog << m_name;
 }
+void Analyzer::remove(const Diagram& diag, QVector<Diagram>& diagrams)
+{
 
-void Analyzer::insert/*OrUpdate*/(const Diagram& diag, QVector<Diagram>& diagrams) {
+    for (int i=0;i<diagrams.count();i++)
+    {
+        if (diag.m_name==diagrams[i].m_name)
+        {
+            diagrams.remove(i);
+            return;
+        }
+    }
+}
+void Analyzer::insert(const Diagram& diag, QVector<Diagram>& diagrams) {
     auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
         return equalNames(diag, elem);
     });
@@ -15,9 +28,6 @@ void Analyzer::insert/*OrUpdate*/(const Diagram& diag, QVector<Diagram>& diagram
     if (it == diagrams.end()) {
         diagrams.push_back(diag);
     }
-   /* else {
-        *it = diag;
-    }*/
 }
 void Analyzer::update(const Diagram& diag, QVector<Diagram>& diagrams)
 {
