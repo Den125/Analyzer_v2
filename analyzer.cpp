@@ -4,11 +4,11 @@
 #include <algorithm>
 #include <iostream>
 
-bool Analyzer::equalNames(const Diagram& lhs, const Diagram& rhs) {
+bool equalNames(const Diagram& lhs, const Diagram& rhs) {
     return lhs.m_name == rhs.m_name;
    // std::clog << m_name;
 }
-void Analyzer::remove(const Diagram& diag, QVector<Diagram>& diagrams)
+void remove_diag(const Diagram& diag, QVector<Diagram>& diagrams)
 {
 
     for (int i=0;i<diagrams.count();i++)
@@ -20,7 +20,7 @@ void Analyzer::remove(const Diagram& diag, QVector<Diagram>& diagrams)
         }
     }
 }
-void Analyzer::insert(const Diagram& diag, QVector<Diagram>& diagrams) {
+void insert(const Diagram& diag, QVector<Diagram>& diagrams) {
     auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
         return equalNames(diag, elem);
     });
@@ -29,7 +29,7 @@ void Analyzer::insert(const Diagram& diag, QVector<Diagram>& diagrams) {
         diagrams.push_back(diag);
     }
 }
-void Analyzer::update(const Diagram& diag, QVector<Diagram>& diagrams)
+void update(const Diagram& diag, QVector<Diagram>& diagrams)
 {
     auto it = std::find_if(diagrams.begin(), diagrams.end(), [&diag](Diagram& elem) {
         return equalNames(diag, elem);
@@ -39,7 +39,7 @@ void Analyzer::update(const Diagram& diag, QVector<Diagram>& diagrams)
     }
 }
 
-QVector<Diagram> Analyzer::analyze(QVector<Diagram> copy_diagrams)
+QVector<Diagram> analyze(QVector<Diagram> copy_diagrams)
 {
     QVector<Diagram> result(copy_diagrams);
 
@@ -51,13 +51,13 @@ QVector<Diagram> Analyzer::analyze(QVector<Diagram> copy_diagrams)
     return result;
 }
 
-void Analyzer::analyze_current_diagramm(Diagram& item, QVector<Diagram>& all_diagrams)
+void analyze_current_diagramm(Diagram& item, QVector<Diagram>& all_diagrams)
 {
     std::map<Diagram::Type, std::function<void(Diagram&, QVector<Diagram>&)>> functions({
-        { Diagram::Type::use_case, Analyzer::analyze_usecase_diagram },
-        { Diagram::Type::robustness, Analyzer::analyze_robustness_diagram },
-        { Diagram::Type::sequence, Analyzer::analyze_sequence_diagram },
-        { Diagram::Type::classes, Analyzer::analyze_classes_diagram }
+        { Diagram::Type::use_case, analyze_usecase_diagram },
+        { Diagram::Type::robustness, analyze_robustness_diagram },
+        { Diagram::Type::sequence, analyze_sequence_diagram },
+        { Diagram::Type::classes, analyze_classes_diagram }
     });
 
     functions[item.m_type](item, all_diagrams);

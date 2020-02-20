@@ -1,7 +1,7 @@
 #include "analyzer.h"
 #include <QDebug>
 
-void Analyzer::analyze_sequence_diagram(Diagram& sequence, QVector<Diagram>& all_diagrams)
+void analyze_sequence_diagram(Diagram& sequence, QVector<Diagram>& all_diagrams)
 {
     QMap<QString,QStringList> class_list;
     QRegExp objects("\".*:.*\"\\sas\\s.*(?=\\n)");

@@ -2,10 +2,10 @@
 #include "analyzer.h"
 #include <QDebug>
 
-void Analyzer::analyze_robustness_diagram(Diagram& robustness, QVector<Diagram>& all_diagrams)
+void analyze_robustness_diagram(Diagram& robustness, QVector<Diagram>& all_diagrams)
 {
     QStringList objects;
-    QRegExp objects_all("\\b(actor |boundary |entity |control ).*(?=\\n)");
+    QRegExp objects_all("\\b(actor |boundary |entity ).*(?=\\n)");
     objects_all.setMinimal(true);
     objects_all.setCaseSensitivity(Qt::CaseInsensitive);
     int index=0;

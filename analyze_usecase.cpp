@@ -1,10 +1,9 @@
 #include "analyzer.h"
 #include <QDebug>
 
-void Analyzer::analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_diagrams)
-{
+void analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_diagrams)
+{    
     QString find_str;
-
     QRegExp ucase ("(((?:usecase )((\\w+( as \".+\")?)|(\".+\" as \\w+)))|(\\(\\w+\\)))(?=\\n)");
     ucase.setMinimal(true);
     ucase.setCaseSensitivity(Qt::CaseInsensitive);
@@ -40,13 +39,13 @@ void Analyzer::analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_
                 })==robustnessDg.end()
                 && all_diagrams[i].m_type == Diagram::Type::robustness)
         {
-            remove(all_diagrams[i],all_diagrams);
+            remove_diag(all_diagrams[i],all_diagrams);
         }
     }
-    Analyzer::get_actors_list(all_diagrams);
+    get_actors_list(all_diagrams);
 }
 
-QMap<QString,QStringList> Analyzer::get_actors_list(QVector<Diagram> &diagrams)
+QMap<QString,QStringList> get_actors_list(QVector<Diagram> &diagrams)
 {
     QMap<QString,QStringList> list_actors;
     auto usecaseIt = std::find_if(diagrams.begin(), diagrams.end(), [](const Diagram& diag) {

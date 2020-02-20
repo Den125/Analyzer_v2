@@ -7,25 +7,21 @@
 #include <QVector>
 #include <QJsonObject>
 #include "diagram.h"
-
-class ANALYZER_EXPORT Analyzer
+extern "C"
 {
-public:
-    static QVector<Diagram> analyze(QVector<Diagram> copy_diagrams);
-    static QMap<QString,QStringList> get_actors_list(QVector<Diagram> &diagrams);
-private:
-    static bool equalNames(const Diagram& lhs, const Diagram& rhs);
-    static void insert(const Diagram& diag, QVector<Diagram>& diagrams);
-    static void update(const Diagram& diag, QVector<Diagram>& diagrams);
-    static void remove(const Diagram& diag, QVector<Diagram>& diagrams);
-    static void analyze_current_diagramm(Diagram &current, QVector<Diagram>& all_diagrams);
+    Q_DECL_EXPORT QVector<Diagram> analyze(QVector<Diagram> copy_diagrams);
+    Q_DECL_EXPORT QMap<QString,QStringList> get_actors_list(QVector<Diagram> &diagrams);
 
-    static void analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_diagrams);
-    static void analyze_robustness_diagram(Diagram& robustness, QVector<Diagram>& all_diagrams);
-    static void analyze_sequence_diagram(Diagram& sequence, QVector<Diagram>& all_diagrams);
-    static void analyze_classes_diagram(Diagram& classes, QVector<Diagram>& all_diagrams) {
+    bool equalNames(const Diagram& lhs, const Diagram& rhs);
+    void insert(const Diagram& diag, QVector<Diagram>& diagrams);
+    void update(const Diagram& diag, QVector<Diagram>& diagrams);
+    void remove_diag(const Diagram& diag, QVector<Diagram>& diagrams);
+    void analyze_current_diagramm(Diagram &current, QVector<Diagram>& all_diagrams);
 
-    }
+    void analyze_usecase_diagram(Diagram& use_case, QVector<Diagram>& all_diagrams);
+    void analyze_robustness_diagram(Diagram& robustness, QVector<Diagram>& all_diagrams);
+    void analyze_sequence_diagram(Diagram& sequence, QVector<Diagram>& all_diagrams);
+    void analyze_classes_diagram(Diagram& classes, QVector<Diagram>& all_diagrams);
 };
 
 #endif // ANALYZER_H
